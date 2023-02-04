@@ -42,7 +42,7 @@ const hilbert = (lvl, w, h, x = width, y = height, c = 0, q = 0) => {
     if (q == 0) {
       pospts = [0, 1, 3, 2];
     } else if (q == 1) {
-      pospts = [1];
+      pospts = [3];
     }
     pospts.forEach((pos) => {
       hilbert(lvl - 1, w/2, h/2, x, y, 4*c, pos);
