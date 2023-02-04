@@ -39,6 +39,11 @@ const hilbert = (lvl, w, h, x = width, y = height, c = 0, q = 0) => {
     points.push(dot1)
   } else {
     let pospts = [0, 2, 3, 1];//.sort( () => .5 - Math.random() );
+    if (q == 0) {
+      pospts = [0, 1, 3, 2];
+    } else if (q == 1) {
+      pospts = [1];
+    }
     pospts.forEach((pos) => {
       hilbert(lvl - 1, w/2, h/2, x, y, 4*c, pos);
     });
