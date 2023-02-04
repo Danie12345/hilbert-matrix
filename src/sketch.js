@@ -14,10 +14,10 @@ function setup() {
 function draw() {
   background(0);
 
-  hilbert(9, width, height);
-  console.log(points.length);
+  hilbert(8, width, height);
+  // console.log(points.length);
   // points = rotate(points);
-  // lines(points);
+  lines(points);
   noLoop();
 }
 
@@ -38,7 +38,15 @@ const hilbert = (lvl, w, h, x = width, y = height, c = 0, q = 0) => {
     // text(color, x + 3*color, y + 3*color);
     points.push(dot1)
   } else {
+    // console.log(lvl, q);
     let pospts = [0, 2, 3, 1];//.sort( () => .5 - Math.random() );
+    if (q == 0 || q == 1) {
+      pospts = [1, 3, 2, 0];
+    } else if (q == 1) {
+      // pospts = [3,2,1,0];
+    } else if (q == 2 || q == 3) {
+      pospts = [0,2,3,1];
+    }
     pospts.forEach((pos) => {
       hilbert(lvl - 1, w/2, h/2, x, y, 4*c, pos);
     });
@@ -46,7 +54,7 @@ const hilbert = (lvl, w, h, x = width, y = height, c = 0, q = 0) => {
 };
 
 const lines = (points) => {
-  console.log(points);
+  // console.log(points);
   let p = points[0].point;
   for (let i = 0; i < points.length - 1; i++) {
     let p2 = points[i+1].point
