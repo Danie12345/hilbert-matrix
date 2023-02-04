@@ -1,0 +1,14 @@
+{
+  "name": "hilbert-matrix",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "p5 server src"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "p5": "^1.5.0"
+  }
+}
