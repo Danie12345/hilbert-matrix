@@ -68,35 +68,6 @@ const lines = (points) => {
   }
 }
 
-// const rotate = (A, lvl = level, q = 0) => {
-//   let res = [];
-//   if (lvl > 1) {
-//     let B = toMatrix(split(A, 4));
-//     if (B[0] instanceof Array) {
-//       B.forEach((b, i) => {
-//         if (b instanceof Array) {
-//           rotate(b, lvl-1, i).forEach((el) => {
-//             res.push(el);
-//           });
-//           // res.push(...rotate(b, lvl-1, i));
-//         }
-//       });
-//     } else {
-//       return toArray(B);
-//     }
-//   } else {
-//     if (q == 0) {
-//       return toArray(T(A));
-//     } else if (q == 1) {
-//       return toArray(iT(A));
-//     } else {
-//       return toArray(A);
-//     }
-//   }
-//   console.log(res);
-//   return res;
-// }
-
 const rotate = (A, lvl = level, q = 2) => {
   if (lvl == 1) {
     return A;
@@ -126,12 +97,6 @@ const rotate = (A, lvl = level, q = 2) => {
   }
   return B;
 }
-
-
-// const split = (l, chnk = 4) => {
-//   return [...Array(Math.ceil(l.length / chnk))].map(_ => l.splice(0, chnk));
-// }
-
 
 const split = (l, chnk = 4) => {
   let cnt = Math.ceil(l.length/chnk);
