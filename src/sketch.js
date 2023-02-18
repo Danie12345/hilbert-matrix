@@ -2,7 +2,7 @@ const width = 400, height = 400;
 const coordDirs = { 0: [-1,-1], 1: [1,-1], 2: [-1, 1], 3: [1, 1] };
 let points = [];
 let points2 = [];
-let level = 5;
+let level = 4;
 
 function setup() {
   createCanvas(width, height);
@@ -23,16 +23,15 @@ function draw() {
   points.forEach((pt, i) => {
     pt.color = points2[i].color;
   });
-  console.log(points);
   lines(points);
   
-  points.forEach((pt) => {
-    noStroke();
-    fill(255);
-    textSize(8);
-    // text(pt.color, pt.point.x + 2, pt.point.y + 7);
-  });
-
+  // points.forEach((pt) => {
+  //   noStroke();
+  //   fill(255);
+  //   textSize(8);
+  //   text(pt.color, pt.point.x + 2, pt.point.y + 7);
+  // });
+  console.log('Efficiency:',(400 * points.length/Math.pow(4, level)).toFixed(2));
   noLoop();
 }
 
@@ -70,28 +69,55 @@ const lines = (points) => {
 
 const rotate = (A, lvl = level, q = 2) => {
   if (lvl == 1) {
-    return A;
+    if (q == 0) {
+      return toArray(T(toMatrix(A)));
+    } else if (q == 1) {
+      return toArray(iT(toMatrix(A)));
+    } else {
+      return A;
+    }
   }
   let B = split(A);
   if (q == 0) {
     B = [
-      ...toArray(T(split(rotate(B[0], lvl-1, 0)))),
-      ...rotate(B[1], lvl-1, 1),
-      ...rotate(B[3], lvl-1, 3),
-      ...toArray(iT(split(rotate(B[2], lvl-1, 2)))),
+      ...rotate(B[0], lvl-1, 2),
+      ...rotate(B[1], lvl-1, 0),
+      ...toArray(split(rotate(B[3], lvl-1, 0))),
+      ...toArray(flipH(translate(split(rotate(B[2], lvl-1, 2)),2))),
     ];
   } else if (q == 1) {
     B = [
-      ...toArray(T(split(rotate(B[3], lvl-1, 3)))),
-      ...rotate(B[2], lvl-1, 2),
-      ...rotate(B[0], lvl-1, 0),
-      ...toArray(iT(split(rotate(B[1], lvl-1, 1)))),
+      ...toArray(T(split(rotate(B[3], lvl-1, 4)))),
+      ...toArray(translate(iT(T(split(rotate(B[2], lvl-1, 5)))), 2)),
+      ...rotate(B[0], lvl-1, 5),
+      ...rotate(B[1], lvl-1, 2),
     ];
-  } else {
+  } else if (q == 2) {
     B = [
       ...rotate(B[0], lvl-1, 0),
       ...rotate(B[2], lvl-1, 2),
       ...rotate(B[3], lvl-1, 3),
+      ...rotate(B[1], lvl-1, 1),
+    ];
+  } else if (q == 3) {
+    B = [
+      ...rotate(B[0], lvl-1, 0),
+      ...rotate(B[2], lvl-1, 2),
+      ...rotate(B[3], lvl-1, 3),
+      ...rotate(B[1], lvl-1, 1),
+    ];
+  } else if (q == 4) {
+    B = [
+      ...rotate(B[3], lvl-1, 3),
+      ...rotate(B[1], lvl-1, 1),
+      ...rotate(B[0], lvl-1, 0),
+      ...rotate(B[2], lvl-1, 2),
+    ];
+  } else if (q == 5) {
+    B = [
+      ...rotate(B[3], lvl-1, 3),
+      ...rotate(B[2], lvl-1, 2),
+      ...rotate(B[0], lvl-1, 0),
       ...rotate(B[1], lvl-1, 1),
     ];
   }
@@ -141,4 +167,16 @@ const iT = (A) => {
   g = T(g);
   g = g.map((row) => row.reverse());
   return g;
+}
+
+const flipV = (A) => A.reverse();
+
+const flipH = (A) => A.map((row) => row.reverse());
+
+const translate = (A, q = 0) => {
+  if (q > 0) {
+    let [a,b,c,d] = toArray(A);
+    return translate([[b,d],[a,c]], q - 1);
+  }
+  return A;
 }
