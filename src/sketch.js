@@ -3,6 +3,7 @@ const coordDirs = { 0: [-1,-1], 1: [1,-1], 2: [-1, 1], 3: [1, 1] };
 let points = [];
 let points2 = [];
 let level = 4;
+let M;
 
 function setup() {
   createCanvas(width, height);
@@ -24,6 +25,11 @@ function draw() {
     pt.color = points2[i].color;
   });
   lines(points);
+
+  M = new Matrix(points, level);
+  const f = toArray(M.hilbertify(M.A, level));
+  console.log(f);
+  lines(f);
   
   // points.forEach((pt) => {
   //   noStroke();
