@@ -1,4 +1,4 @@
-const width = 400, height = 400;
+const width =800, height = 800;
 const coordDirs = { 0: [-1,-1], 1: [1,-1], 2: [-1, 1], 3: [1, 1] };
 let points = [];
 let points2 = [];
@@ -19,24 +19,25 @@ function draw() {
 
   hilbert(level, width, height);
 
-  points = rotate(points).filter((e) => e !== undefined);
+  points = rotates(points).filter(e => e != undefined);//rotate(points).filter((e) => e !== undefined);
+  console.log(points);
   
   points.forEach((pt, i) => {
     pt.color = points2[i].color;
   });
   lines(points);
 
-  M = new Matrix(points, level);
-  const f = toArray(M.hilbertify(M.A, level));
-  console.log(f);
-  lines(f);
+  // M = new Matrix(points, level);
+  // const f = toArray(M.hilbertify(M.A, level));
+  // console.log(f);
+  // lines(f);
   
-  // points.forEach((pt) => {
-  //   noStroke();
-  //   fill(255);
-  //   textSize(8);
-  //   text(pt.color, pt.point.x + 2, pt.point.y + 7);
-  // });
+  points.forEach((pt) => {
+    noStroke();
+    fill(255);
+    textSize(8);
+    text(pt.color, pt.point.x + 2, pt.point.y + 7);
+  });
   console.log('Efficiency:',(400 * points.length/Math.pow(4, level)).toFixed(2));
   noLoop();
 }
@@ -63,13 +64,13 @@ const hilbert = (lvl, w, h, x = width, y = height, c = 0, q = 0) => {
 };
 
 const lines = (points) => {
-  let p = points[0].point;
+  let pt = points[0].point;
   for (let i = 0; i < points.length - 1; i++) {
     let p2 = points[i+1].point
     strokeWeight(1)
     stroke(255)
-    line(p.x, p.y, p2.x, p2.y);
-    p = p2;
+    line(pt.x, pt.y, p2.x, p2.y);
+    pt = p2;
   }
 }
 
@@ -186,3 +187,26 @@ const translate = (A, q = 0) => {
   }
   return A;
 }
+
+
+const rotates = (A, l = level) => {
+  if (l == 1) {
+    return A;
+  } else {
+    let len = A.length/4;
+    let q = (level - l)%4;
+    console.log(q);
+    let [a,b,c,d] = [A.slice(0, len), A.slice(len, 2*len), A.slice(2*len, 3*len), A.slice(3*len, 4*len)];
+    return [...rotates(toArray(T(toMatrix(a))),l-1),...rotates(toArray(T(T(toMatrix(b)))),l-1),...rotates(d,l-1),...rotates(toArray(iT(toMatrix(c))),l-1)];
+    if (q == 0) {
+    } else if (q == 1) {
+      return toArray(iT(iT(toMatrix([...rotates(a,l-1),...rotates(c,l-1),...rotates(d,l-1),...rotates(b,l-1)]))));
+    } else if (q == 2) {
+      return toArray(T(T(toMatrix([...rotates(a,l-1),...rotates(c,l-1),...rotates(d,l-1),...rotates(b,l-1)]))));
+    } else if (q == 3) {
+      return [...rotates(toArray(T(toMatrix(b))),l-1),...rotates(toArray(T(T(toMatrix(d)))),l-1),...rotates(c,l-1),...rotates(toArray(iT(toMatrix(a))),l-1)];
+    }
+  }
+}
+
+

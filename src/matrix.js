@@ -3,6 +3,7 @@ class Matrix {
     this.A = this.toMatrix(A);
     this.points = A;
     this.level = level;
+    console.log(A, this.A);
   }
 
   toArray = (A) => {
@@ -15,6 +16,18 @@ class Matrix {
     var arr = [];
     var rows = Math.sqrt(A.length);
     for (var i = 0; i < rows; i++) {
+      arr[i] = [];
+      for (var j = 0; j < rows; j++) {
+        arr[i][j] = A[i * rows + j];
+      }
+    }
+    return arr;
+  }
+
+  toMatrix = (A) => {
+    var arr = [];
+    var rows = Math.sqrt(A.length);
+    for (var i = 0; i < rows; i += rows/2) {
       arr[i] = [];
       for (var j = 0; j < rows; j++) {
         arr[i][j] = A[i * rows + j];
@@ -52,14 +65,14 @@ class Matrix {
 
   hilbertify = (A, lvl = this.level, q = 0) => {
     if (lvl > 1) {
-      let B = this.submatrices(A);
-      console.log(A);
-      console.log(B);
+      // let B = this.submatrices(A);
+      // console.log(A);
+      // console.log(B);
       return this.mergetrix(
-        this.hilbertify(B[0], lvl - 1, 0),
-        this.hilbertify(B[1], lvl - 1, 1),
-        this.hilbertify(B[2], lvl - 1, 2),
-        this.hilbertify(B[3], lvl - 1, 3),
+        this.hilbertify(A[0], lvl - 1, 0),
+        this.hilbertify(A[1], lvl - 1, 1),
+        this.hilbertify(A[2], lvl - 1, 2),
+        this.hilbertify(A[3], lvl - 1, 3),
       );
     }
     switch (q) {
@@ -73,10 +86,11 @@ class Matrix {
   }
 
   submatrices = (A) => {
-    const res = []
+    console.log(A);
+    let res = []
     for(let i = 0; i < A.length; i += A.length/2){
-        res.push([A[i].slice(0, 2), A[i + 1].slice(0, 2)]);
-        res.push([A[i].slice(2), A[i + 1].slice(2)]);
+      res.push([A[i].slice(0, 2), A[i + 1].slice(0, 2)]);
+      res.push([A[i].slice(2), A[i + 1].slice(2)]);
     }
     return res;
   }
