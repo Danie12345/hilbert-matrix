@@ -1,8 +1,8 @@
-const width =800, height = 800;
+const width = 600, height = 600;
 const coordDirs = { 0: [-1,-1], 1: [1,-1], 2: [-1, 1], 3: [1, 1] };
 let points = [];
 let points2 = [];
-let level = 4;
+let level = 3;
 let M;
 
 function setup() {
@@ -197,14 +197,34 @@ const rotates = (A, l = level) => {
     let q = (level - l)%4;
     console.log(q);
     let [a,b,c,d] = [A.slice(0, len), A.slice(len, 2*len), A.slice(2*len, 3*len), A.slice(3*len, 4*len)];
-    return [...rotates(toArray(T(toMatrix(a))),l-1),...rotates(toArray(T(T(toMatrix(b)))),l-1),...rotates(d,l-1),...rotates(toArray(iT(toMatrix(c))),l-1)];
     if (q == 0) {
+      return rotates([
+        ...a,
+        ...c,
+        ...d,
+        ...b,
+      ], l-1)
     } else if (q == 1) {
-      return toArray(iT(iT(toMatrix([...rotates(a,l-1),...rotates(c,l-1),...rotates(d,l-1),...rotates(b,l-1)]))));
+      return rotates([
+        ...d,
+        ...a,
+        ...c,
+        ...b,
+      ], l-1)
     } else if (q == 2) {
-      return toArray(T(T(toMatrix([...rotates(a,l-1),...rotates(c,l-1),...rotates(d,l-1),...rotates(b,l-1)]))));
+      return rotates([
+        ...c,
+        ...b,
+        ...a,
+        ...d,
+      ], l-1)
     } else if (q == 3) {
-      return [...rotates(toArray(T(toMatrix(b))),l-1),...rotates(toArray(T(T(toMatrix(d)))),l-1),...rotates(c,l-1),...rotates(toArray(iT(toMatrix(a))),l-1)];
+      return rotates([
+        ...a,
+        ...b,
+        ...c,
+        ...d,
+      ], l-1)
     }
   }
 }
